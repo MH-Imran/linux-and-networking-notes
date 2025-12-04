@@ -1,4 +1,4 @@
-# DNS in Detail 
+# DNS in Detail - TryHackMe Notes
 
 
 These are my personal notes from the “DNS in Detail” room in TryHackMe’s How The Web Works module. I tried to simplify everything so I actually understand how DNS works behind the scenes, not just the definitions.
@@ -37,5 +37,69 @@ These are my personal notes from the “DNS in Detail” room in TryHackMe’s H
 - The caching layers make everything faster but can also hide recent changes.
 - Understanding DNS helps me read logs and alerts more confidently.
 
-
 _**Completed:** 02 Dec 2025_
+
+
+
+
+---
+
+
+
+
+
+
+
+# HTTP in Detail - TryHackMe Notes
+
+
+These are my personal notes from the “HTTP in Detail” room in the How the Web Works module. I tried to write this in simple language so I can remember how HTTP actually works when looking at logs or alerts later.
+
+
+
+### What I Learned
+
+- HTTP is a request–response protocol. The browser sends a request and the server sends a response.
+- An HTTP message has two main parts:
+  - **Headers** (information about the request/response)
+  - **Body** (the actual content, if any)
+- HTTP methods make more sense now:
+  - **GET** – retrieve data  
+  - **POST** – send data  
+  - **PUT** – update something  
+  - **DELETE** – remove something  
+- I finally understand why status codes are important:
+  - `200` → OK  
+  - `301/302` → redirects  
+  - `400` → bad request  
+  - `403` → forbidden  
+  - `404` → not found  
+  - `500` → server error  
+- What surprised me is how much information is in the headers. Things like:
+  - User-Agent  
+  - Content-Type  
+  - Authorization  
+  - Cookies  
+  - Host  
+  All of this can show attacker behavior in SOC logs.
+
+
+
+### Why This Matters for SOC Work
+
+- Many attacks come through HTTP: SQL injection, XSS, brute force, directory traversal, etc.
+- Malicious requests often have weird headers or unusual methods.
+- Understanding how HTTP works makes it easier to analyze alerts from:
+  - WAF (Web Application Firewall)
+  - Proxy logs
+  - SIEM (Elastic, Splunk, Security Onion)
+- Things like 404 bursts, 500 spikes, or strange user-agents can indicate probes or attacks.
+
+
+### Takeaways
+
+- HTTP is simple but extremely powerful.
+- The structure of requests and responses is important for detecting abnormal activity.
+- Knowing the normal behavior helps spot the abnormal behavior later.
+
+_**Completed:** 04 Dec 2025_
