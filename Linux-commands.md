@@ -38,6 +38,15 @@ Especially helpful for failed login attempts or service errors.
 Shows SSH-related events.  
 Good for spotting when someone logs in, fails to log in, or restarts the SSH service.
 
+## `journalctl | grep -i http`
+shows all system log entries related to Apache, useful for debugging web server problems and monitoring for security issues.
+
+## `journalctl | grep -i nginx`
+shows all system log messages related to NGINX, helping you find configuration problems, service errors, or suspicious activity.
+
+## `journalctl | grep -i apache`
+shows all system log entries related to Apache, useful for debugging web server problems and monitoring for security issues.
+
 ---
 
 # 3. Process & System Monitoring
