@@ -1,111 +1,84 @@
-# Linux Command Practice Notes
+# Linux Command Practice Notes  
 
-These are my personal notes from practicing Linux commands between **01 Dec – 04 Dec 2025**.  
-I wrote them in a simple way so I can actually remember why each command matters, not just what it does.  
-The goal wasn’t to memorize everything — just to build hands-on comfort and understand how Linux behaves.
+These are my personal notes from practicing Linux commands across my first 6 days of SOC training.  
+I’m not trying to memorize everything — just to build comfort, understand patterns, and make Linux feel “normal” during investigations.
 
 ---
 
-# 1. Networking Commands
+# 1. Networking & Connection Commands
 
 ## `ip a`
-Shows all network interfaces and their IP addresses.  
-I use this to quickly see my machine’s current IP or check if an interface is up.
+Shows all interfaces and their IP addresses.  
+I use it to check if the machine has connectivity or if an interface is down.
 
 ## `ip r`
-Displays the routing table.  
-This helped me understand how traffic leaves my machine and which gateway it uses.
+Prints the routing table.  
+Helpful for seeing *how* my machine sends traffic (which gateway, which interface).
 
 ## `ss -tunap`
-Shows active network connections and listening ports.  
-Useful for spotting which services are open or if something suspicious is listening.
+Lists active TCP/UDP connections and listening ports.  
+Very useful for spotting suspicious services or unknown open ports.
+
+## `ping <ip/domain>`
+Tests basic connectivity.  
+Simple, but still one of the best first steps when something “doesn’t work.”
+
+## `traceroute <ip>`
+Shows the hops packets take across the network.  
+Good for understanding network paths or detecting routing issues.
 
 ---
 
-# 2. Log Investigation Commands
-
-*(Since I’m using Kali, most logs live in `journalctl` instead of `/var/log/auth.log`.)*
+# 2. Log & Event Investigation Commands  
+*(Since Kali relies heavily on systemd, most logs come through `journalctl`.)*
 
 ## `journalctl -xe`
-Shows recent system logs with detailed error messages.  
-This helps me understand what went wrong or what the system is reacting to.
+Shows recent logs with extended info.  
+My go-to command when something breaks or behaves strangely.
 
 ## `journalctl | grep -i failed`
-Searches logs for anything related to “failed.”  
-Especially helpful for failed login attempts or service errors.
+Finds failure-related entries.  
+Great for spotting login failures, service startup problems, or permission issues.
 
 ## `journalctl | grep -i ssh`
-Shows SSH-related events.  
-Good for spotting when someone logs in, fails to log in, or restarts the SSH service.
+Shows SSH activity — successful & failed logins, restarts, etc.
+
+## `journalctl | grep -i login`
+Helps track session starts and authentication events.
+
+## `journalctl | grep -i error`
+Useful when troubleshooting any system-level issue.
+
+## `journalctl | grep -i session`
+Shows user session opens/closes — important for T1078 + T1110 investigations.
 
 ## `journalctl | grep -i http`
-shows all system log entries related to Apache, useful for debugging web server problems and monitoring for security issues.
-
-## `journalctl | grep -i nginx`
-shows all system log messages related to NGINX, helping you find configuration problems, service errors, or suspicious activity.
+Filters logs for HTTP-related entries (Apache/Nginx events).
 
 ## `journalctl | grep -i apache`
-shows all system log entries related to Apache, useful for debugging web server problems and monitoring for security issues.
+Anything related to Apache web server.
+
+## `journalctl | grep -i nginx`
+Anything related to NGINX.
+
+## `ls /var/log`
+List all traditional log files.  
+Good for learning where different logs live in Ubuntu/Kali.
 
 ---
 
-# 3. Process & System Monitoring
+# 3. File, Directory & Permission Commands  
+(Used heavily on 04–06 Dec)
 
-## `ps aux --sort=-%cpu`
-Lists all running processes and sorts them by CPU usage.  
-Helps me notice if something is eating resources unexpectedly.
+## `ls -l`
+Detailed listing showing permissions, owners, groups.
 
-## `top`
-Real-time system monitor for CPU, RAM, and processes.  
-Good for watching behavior as it happens.
-
-## `htop` (when installed)
-A prettier, more readable version of `top`.
-
-## `du -sh /var/*`
-Shows which folders consume the most space.  
-Useful for understanding storage usage.
-
----
-
-# 4. User & Access Commands (04 Dec Focus)
-
-## `cat /etc/passwd`
-Shows all user accounts on the system.  
-Helped me distinguish system accounts from normal ones.
-
-## `cat /etc/group`
-Lists all groups and their members.  
-Good for understanding permissions.
-
-## `id`
-Shows the current user’s UID, GID, and group memberships.
-
-## `who`
-Shows who is currently logged in.
-
-## `last`
-Displays recent login history, reboots, and sessions.
-
-## `lastlog`
-Shows last login time for each user.  
-Very useful for spotting accounts that shouldn't be used.
-
-## `sudo -l`
-Lists what commands the current user is allowed to run with sudo.  
-Important for privilege escalation awareness.
-
----
-
-# 5. My Takeaways So Far
-
-- Linux isn’t about memorizing commands — it’s about knowing **why** and **when** to use them.
-- `journalctl` is extremely powerful once you get used to filtering logs.
-- Understanding users, groups, and login patterns makes it much easier to spot abnormal behavior.
-- Networking commands (`ip`, `ss`) are essential — almost every investigation touches networking in some way.
-- Doing this every day for a few minutes is already helping me build muscle memory.
-
----
-
-These notes will grow as I continue practicing Linux for SOC work.  
-I’m starting to appreciate how much information Linux gives you — if you know where to look.
+## `chmod <mode> <file>`
+Changes file permissions.  
+Examples I practiced:
+```bash
+chmod 600 file.txt
+chmod 644 file.txt
+chmod 700 directory/
+```
+_**Practice Range:** 01 Dec – 06 Dec 2025_
